@@ -1,0 +1,34 @@
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "jaci.openrio.gradle.GradleRIO" version "2017.1.5"
+}
+
+frc {
+    team = "1018"
+    robotClass = "org.usfirst.frc.team1018.robot.Robot"
+
+    rioIP = "10.10.18.2" //Eric's squarebot
+    //deploy = false //dev purposes
+}
+
+dependencies {
+    compile wpilib()
+    //compile talonSrx()
+    compile navx()
+}
+
+def robotManifest = {
+    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Robot-Class': frc.robotClass
+}
+
+jar {
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.4'
+}
