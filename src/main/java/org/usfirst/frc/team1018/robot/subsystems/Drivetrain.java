@@ -2,9 +2,8 @@ package org.usfirst.frc.team1018.robot.subsystems;
 
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.usfirst.frc.team1018.robot.DrivePacket;
 import org.usfirst.frc.team1018.robot.RobotMap;
-import org.usfirst.frc.team1018.robot.Util;
+import org.usfirst.frc.team1018.lib.Util;
 
 /**
  * @author Ryan Blue

@@ -8,15 +8,16 @@ plugins {
 frc {
     team = "1018"
     robotClass = "org.usfirst.frc.team1018.robot.Robot"
-
-    rioIP = "10.10.18.2" //Eric's squarebot
-    //deploy = false //dev purposes
+}
+wpi {
+    opencvVersion = "3.1.0"
 }
 
 dependencies {
     compile wpilib()
-    //compile talonSrx()
+    compile talonSrx()
     compile navx()
+    compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 def robotManifest = {

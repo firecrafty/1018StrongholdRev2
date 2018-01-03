@@ -1,4 +1,3 @@
-
 package org.usfirst.frc.team1018.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -38,7 +37,17 @@ public class Robot extends IterativeRobot {
         roller = new VictorSP(6);
         extender = new VictorSP(7);
         oi = new OI();
-
+        /*
+        SmartDashboard.putNumber("kP", 0);
+        SmartDashboard.putNumber("kI", 0);
+        SmartDashboard.putNumber("kD", 0);
+        SmartDashboard.putNumber("kF", 0);
+        SmartDashboard.putNumber("TopShooterFeedback", 0);
+        SmartDashboard.putNumber("BottomShooterFeedback", 0);
+        SmartDashboard.putNumber("TopShooterPIDOutput", 0);
+        SmartDashboard.putNumber("BottomShooterPIDOutput", 0);
+        SmartDashboard.putNumber("TopMotor", 0);
+        SmartDashboard.putNumber("BottomMotor", 0);*/
     }
 
     /**
@@ -81,12 +90,11 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        shooter.enable();
-        SmartDashboard.putNumber("Speed", 0);
-        SmartDashboard.putNumber("TP", 0);
-        SmartDashboard.putNumber("TI", 0);
-        SmartDashboard.putNumber("TD", 0);
-
+        //shooter.enable();
+        //SmartDashboard.putNumber("Speed", );
+        //SmartDashboard.putNumber("kP", 0);
+        //SmartDashboard.putNumber("kI", 0);
+        //SmartDashboard.putNumber("kD", 0);
     }
 
     /**
@@ -94,14 +102,37 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
-        shooter.setPID(SmartDashboard.getNumber("TP", 0), SmartDashboard.getNumber("TI", 0), SmartDashboard.getNumber("TD", 0));
         drivetrain.driveCheesy(oi.getThrottle(), oi.getTurn(), oi.getQuickTurn());
-        shooter.setSpeed(SmartDashboard.getNumber("Speed", 0));
-        SmartDashboard.putNumber("TopShooterFeedback", shooter.top.getRate());
-        SmartDashboard.putNumber("BottomShooterFeedback", shooter.bottom.getRate());
-        SmartDashboard.putNumber("TopShooterOutput", shooter.top.getSetpoint());
-        SmartDashboard.putNumber("BottomShooterOutput", shooter.bottom.getSetpoint());
+        /**if(oi.joystick.getRawButton(1)) {
+         roller.set(1);
+         } else if(oi.joystick.getRawButton(2)) {
+         roller.set(-1);
+         } else {
+         roller.set(0);
+         }
+         shooter.bottom.shooterMotor.set(-((oi.joystick.getRawAxis(3) - 1) / 2));
+         shooter.top.shooterMotor.set(-((oi.joystick.getRawAxis(3) - 1) / 2));
+         if(oi.joystick.getRawButton(5)) {
+         extender.set(-0.5);
+         } else if(oi.joystick.getRawButton(3)) {
+         extender.set(0.5);
+         } else {
+         extender.set(0);
+         }*/
+
+
+        /*shooter.setPID(SmartDashboard.getNumber("kP", 0), SmartDashboard.getNumber("kI", 0), SmartDashboard.getNumber("kD", 0), SmartDashboard.getNumber("kF", 0));
+        shooter.setSpeedRpm(SmartDashboard.getNumber("Speed", 0));
+        //drivetrain.driveCheesy(oi.getThrottle(), oi.getTurn(), oi.getQuickTurn());
+        SmartDashboard.putNumber("TopShooterFeedback", shooter.top.getRateRpm());
+        SmartDashboard.putNumber("BottomShooterFeedback", shooter.bottom.getRateRpm());
+        SmartDashboard.putNumber("TopShooterPIDOutput", shooter.top.getPIDController().get());
+        SmartDashboard.putNumber("BottomShooterPIDOutput", shooter.bottom.getPIDController().get());
+        SmartDashboard.putNumber("TopMotor", shooter.top.shooterMotor.get());
+        SmartDashboard.putNumber("BottomMotor", shooter.bottom.shooterMotor.get());
         Scheduler.getInstance().run();
+        //shooter.bottom.shooterMotor.set(SmartDashboard.getNumber("Speed", 0));
+        //shooter.top.shooterMotor.set(SmartDashboard.getNumber("Speed", 0));*/
     }
 
     /**

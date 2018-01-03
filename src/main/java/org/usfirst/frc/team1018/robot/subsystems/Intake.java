@@ -8,7 +8,7 @@ import org.usfirst.frc.team1018.robot.RobotMap;
  * @author Ryan Blue
  */
 public class Intake extends Subsystem {
-
+    public Roller roller = new Roller();
 
     public void initDefaultCommand() {
         // Set the default command, if any, for a subsystem here. Example:
@@ -16,9 +16,13 @@ public class Intake extends Subsystem {
     }
     public class Roller extends Subsystem{
         private VictorSP rollerMotor = new VictorSP(RobotMap.INTAKE_ROLLER_PWM);
-
-        public void setForward() {
+        private VictorSP extenderMotor = new VictorSP(RobotMap.INTAKE_EXTENDER_PWM);
+        public void setRollerForward() {
             rollerMotor.set(1);
+        }
+
+        public void setExtenderMotor(double value) {
+            extenderMotor.set(value);
         }
 
         @Override

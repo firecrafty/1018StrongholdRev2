@@ -1,12 +1,8 @@
 package org.usfirst.frc.team1018.robot.subsystems;
 
 
-import edu.wpi.first.wpilibj.CounterBase;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.TalonSRX;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.usfirst.frc.team1018.lib.Util;
 import org.usfirst.frc.team1018.robot.RobotMap;
 
 /**
@@ -16,13 +12,13 @@ public class Shooter extends Subsystem {
 
     private static Shooter instance;
 
-    public final ShooterModule top = new ShooterModule(RobotMap.SHOOTER_TOP_PWM, RobotMap.SHOOTER_TOP_ENC_A_DIO, RobotMap.SHOOTER_TOP_ENC_B_DIO, false);
-    public final ShooterModule bottom = new ShooterModule(RobotMap.SHOOTER_BOTTOM_PWM, RobotMap.SHOOTER_BOTTOM_ENC_A_DIO, RobotMap.SHOOTER_BOTTOM_ENC_B_DIO, true);
+    public final ShooterModule top = new ShooterModule(RobotMap.SHOOTER_TOP_PWM, RobotMap.SHOOTER_TOP_ENC_A_DIO, RobotMap.SHOOTER_TOP_ENC_B_DIO, false, false);
+    public final ShooterModule bottom = new ShooterModule(RobotMap.SHOOTER_BOTTOM_PWM, RobotMap.SHOOTER_BOTTOM_ENC_A_DIO, RobotMap.SHOOTER_BOTTOM_ENC_B_DIO, true, true);
 
     private Shooter() {
     }
 
-    public void setSpeed(double speed) {
+    public void setSpeedRpm(double speed) {
         top.setSetpoint(speed);
         bottom.setSetpoint(speed);
     }
@@ -52,46 +48,55 @@ public class Shooter extends Subsystem {
         return instance;
     }
 
-    public class ShooterModule extends PIDSubsystem {
+    public class ShooterModule implements PIDOutput {
 
-        private TalonSRX shooterMotor;
+        public TalonSRX shooterMotor;
 
         private Encoder shooterCimcoder;
 
-        private ShooterModule(int motor, int enc_a, int enc_b, boolean reverseDirection) {
+        private PIDController controller;
+
+        private ShooterModule(int motor, int enc_a, int enc_b, boolean reverseMotor, boolean reverseEncoder) {
             // Initialize your subsystem here
-            super(0, 0, 0, 0.05, 0);
-            setAbsoluteTolerance(10);
-            setOutputRange(0, 1);
-            getPIDController().setContinuous(false);
+            System.out.println("Initializing shooter module " + motor);
             shooterMotor = new TalonSRX(motor);
-            shooterMotor.setInverted(reverseDirection);
-            shooterCimcoder = new Encoder(enc_a, enc_b, reverseDirection, CounterBase.EncodingType.k2X);
-            shooterCimcoder.setDistancePerPulse(0.05);
+            shooterMotor.setInverted(reverseMotor);
+            shooterCimcoder = new Encoder(enc_a, enc_b, reverseEncoder, CounterBase.EncodingType.k2X);
+            shooterCimcoder.setDistancePerPulse(RobotMap.SHOOTER_OUTPUT_DIST_PER_PULSE);
+            shooterCimcoder.setPIDSourceType(PIDSourceType.kRate);
+            controller = new PIDController(0, 0, 0, 0, shooterCimcoder, this);
+            controller.setAbsoluteTolerance(5);
+            controller.setInputRange(0, 100);
+            controller.setOutputRange(0, 1);
+            controller.setContinuous(false);
         }
 
-        @Override
-        public void initDefaultCommand() {
-            // Set the default command for a subsystem here.
-            // setDefaultCommand(new MySpecialCommand());
-        }
-
-        @Override
-        protected double returnPIDInput() {
-            // Return your input value for the PID loop
-            // e.g. a sensor, like a potentiometer:
-            // yourPot.getAverageVoltage() / kYourMaxVoltage;
+        public double getRateRpm() {
             return shooterCimcoder.getRate();
         }
 
-        @Override
-        protected void usePIDOutput(double output) {
-            shooterMotor.set(Util.limit(shooterMotor.get() + output, 0, 1));
+        public void enable() {
+            controller.enable();
         }
 
-        public double getRate() {
-            return getPosition();
+        public void disable() {
+            controller.disable();
         }
+
+        public void setSetpoint(double setpoint) {
+            controller.setSetpoint(setpoint);
+        }
+
+        public PIDController getPIDController() {
+            return controller;
+        }
+
+        @Override
+        public void pidWrite(double output) {
+            shooterMotor.set(output);
+        }
+
+
     }
 
 

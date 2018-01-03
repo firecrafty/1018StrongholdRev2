@@ -15,10 +15,14 @@ public class RobotMap {
     public static final int SHOOTER_TOP_PWM = 4;
     public static final int SHOOTER_BOTTOM_PWM = 5;
 
-    public static final int SHOOTER_TOP_ENC_A_DIO = 10;
-    public static final int SHOOTER_TOP_ENC_B_DIO = 11;
+    public static final int SHOOTER_TOP_ENC_A_DIO = 11;
+    public static final int SHOOTER_TOP_ENC_B_DIO = 10;
     public static final int SHOOTER_BOTTOM_ENC_A_DIO = 12;
     public static final int SHOOTER_BOTTOM_ENC_B_DIO = 13;
+
+    public static final double SHOOTER_ENC_RAW_DPP = 1 / 20;
+    public static final double SHOOTER_GEAR_RATIO = 18 / 12;
+    public static final double SHOOTER_OUTPUT_DIST_PER_PULSE = SHOOTER_ENC_RAW_DPP * SHOOTER_GEAR_RATIO;
 
     public static final int INTAKE_ROLLER_PWM = 6;
     public static final int INTAKE_EXTENDER_PWM = 7;
