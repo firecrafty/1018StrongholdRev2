@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1018.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Command;
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void robotInit() {
+        CameraServer.getInstance().startAutomaticCapture();
         drivetrain = Drivetrain.getInstance();
         shooter = Shooter.getInstance();
         roller = new VictorSP(6);
@@ -102,7 +104,8 @@ public class Robot extends IterativeRobot {
      */
     @Override
     public void teleopPeriodic() {
-        drivetrain.driveCheesy(oi.getThrottle(), oi.getTurn(), oi.getQuickTurn());
+        drivetrain.driveHelper.arcadeDrive(oi.getThrottle()*0.5, oi.getTurn(), false);
+        //drivetrain.driveArcade(oi.getThrottle(), oi.getTurn());
         /**if(oi.joystick.getRawButton(1)) {
          roller.set(1);
          } else if(oi.joystick.getRawButton(2)) {

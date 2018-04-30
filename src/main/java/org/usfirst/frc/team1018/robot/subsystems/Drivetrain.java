@@ -1,7 +1,10 @@
 package org.usfirst.frc.team1018.robot.subsystems;
 
-import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.PWMTalonSRX;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import org.usfirst.frc.team1018.robot.RobotMap;
 import org.usfirst.frc.team1018.lib.Util;
 
@@ -18,14 +21,15 @@ public class Drivetrain extends Subsystem {
     private static final double kWheelDeadband = 0.02;
     private static final double kTurnSensitivity = 1.0;
 
-    private TalonSRX leftTalonA = new TalonSRX(RobotMap.LEFT_DRIVE_A_PWM);
-    private TalonSRX leftTalonB = new TalonSRX(RobotMap.LEFT_DRIVE_B_PWM);
-    private TalonSRX rightTalonA = new TalonSRX(RobotMap.RIGHT_DRIVE_A_PWM);
-    private TalonSRX rightTalonB = new TalonSRX(RobotMap.RIGHT_DRIVE_B_PWM);
+    private PWMTalonSRX leftTalonA = new PWMTalonSRX(RobotMap.LEFT_DRIVE_A_PWM);
+    private PWMTalonSRX leftTalonB = new PWMTalonSRX(RobotMap.LEFT_DRIVE_B_PWM);
+    private PWMTalonSRX rightTalonA = new PWMTalonSRX(RobotMap.RIGHT_DRIVE_A_PWM);
+    private PWMTalonSRX rightTalonB = new PWMTalonSRX(RobotMap.RIGHT_DRIVE_B_PWM);
+    private SpeedControllerGroup left = new SpeedControllerGroup(leftTalonA, leftTalonB);
+    private SpeedControllerGroup right = new SpeedControllerGroup(rightTalonA, rightTalonB);
+    public DifferentialDrive driveHelper = new DifferentialDrive(left, right);
 
     private Drivetrain() {
-        rightTalonA.setInverted(true);
-        rightTalonB.setInverted(true);
     }
 
     @Override
@@ -88,5 +92,9 @@ public class Drivetrain extends Subsystem {
         if(instance == null) instance = new Drivetrain();
         return instance;
     }
+    public void driveArcade(double throttle, double turn) {
+        driveHelper.arcadeDrive(throttle, turn, false);
+    }
+
 }
 

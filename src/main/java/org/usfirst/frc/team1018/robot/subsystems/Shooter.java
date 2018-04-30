@@ -50,7 +50,7 @@ public class Shooter extends Subsystem {
 
     public class ShooterModule implements PIDOutput {
 
-        public TalonSRX shooterMotor;
+        public VictorSP shooterMotor;
 
         private Encoder shooterCimcoder;
 
@@ -59,7 +59,7 @@ public class Shooter extends Subsystem {
         private ShooterModule(int motor, int enc_a, int enc_b, boolean reverseMotor, boolean reverseEncoder) {
             // Initialize your subsystem here
             System.out.println("Initializing shooter module " + motor);
-            shooterMotor = new TalonSRX(motor);
+            shooterMotor = new VictorSP(motor);
             shooterMotor.setInverted(reverseMotor);
             shooterCimcoder = new Encoder(enc_a, enc_b, reverseEncoder, CounterBase.EncodingType.k2X);
             shooterCimcoder.setDistancePerPulse(RobotMap.SHOOTER_OUTPUT_DIST_PER_PULSE);

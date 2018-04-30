@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class OI {
 	public Joystick joystick = new Joystick(0);
-	public Joystick yoke = new Joystick(0);
+	public Joystick yoke = new Joystick(1);
 	//private XboxController xboxController = new XboxController(2);
 
     public double getThrottle() {
         return joystick.getY();
     }
     public double getTurn() {
-        return yoke.getX(GenericHID.Hand.kRight);
+        return yoke.getX();
     }
     public boolean getQuickTurn() {
         return yoke.getRawButton(1);
